@@ -7,6 +7,14 @@
   padding: 0;
 }
 
+button {
+    cursor: pointer;
+    border: 2px solid black;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 body {
     overflow: hidden;
@@ -14,7 +22,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #f7f3f3;
+    background-color: #f1f1f1;
 }
 
 .header {
@@ -28,10 +36,95 @@ body {
 
 .main {
     flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .container {
-    width: 400px;
+    width: 350px;
+    height: 600px;
+    background-color: #020112;
+    border: 2px solid black;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen {
+    width: 330px;
+    height: 150px;
+    border: 2px solid black;
+    border-radius: 8px;
+    margin: 20px auto 10px;
+    background-color: #f1f1f1;
+}
+
+.options {
+    display: flex;
+    width: 330px;
+    height: 65px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px auto;
+}
+#clear,
+#delete
+{
+    flex: 1;
+    height: 58px;
+    font-size: 20px;
+    border-radius: 8px;
+}
+#delete {
+    background-color: #e36262;
+}
+#clear {
+    background-color: #feb38b;
+}
+
+.core {
+    width: 330px;
+    height: 300px;
+    display: flex;
+    margin: 10px auto;
+}
+
+.operands {
+    width: 270px;
+    display: flex;
+    flex-wrap: wrap-reverse;
+    gap: 10px;
+}
+
+.operands > * {
+    width: 80px;
+    height: 67.5px;
+    font-size: 22px;
+}
+#equal {
+    background-color: #9df39d;
+}
+.operators {
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    margin-left: auto;
+    margin-right: 0px;
+    align-items: flex-end;
+}
+#add,
+#subtract,
+#divide,
+#multiply 
+{
+    width: 60px;
+    height: 75px;
+    font-size: 22px;
+    background-color: #fafa6c;
 }
 
 .footer {
