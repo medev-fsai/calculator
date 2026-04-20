@@ -45,3 +45,10 @@ console.log(`Operation ${2} + ${3} = ${operate(2,"+",3)}`);
 console.log(`Operation ${2} - ${3} = ${operate(2,"-",3)}`);
 console.log(`Operation ${2} * ${3} = ${operate(2,"*",3)}`);
 console.log(`Operation ${2} / ${3} = ${operate(2,"/",3)}`);
+function updateDateCopyRight(){
+    let date = new Date();
+    let footer = document.querySelector(".footer");
+    footer.textContent += ` - All rights reserved ${date.getFullYear()}`;
+    return;
+}
+updateDateCopyRight();
