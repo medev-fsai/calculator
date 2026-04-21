@@ -18,10 +18,6 @@ function divide(num1, num2){
     return num1 / num2;
 }
 
-console.log(`Result of addition of ${2} and ${3} is ${add(2,3)}`);
-console.log(`Result of subtraction of ${2} from ${3} is ${subtract(2,3)}`);
-console.log(`Result of multiplication of ${2} and ${3} is ${multiply(2,3)}`);
-console.log(`Result of division of ${2} by ${3} is ${divide(2,3)}`);
 
 function operate(operandOne, operator, operandTwo){
 
@@ -41,10 +37,7 @@ function operate(operandOne, operator, operandTwo){
     }
 }
 
-console.log(`Operation ${2} + ${3} = ${operate(2,"+",3)}`);
-console.log(`Operation ${2} - ${3} = ${operate(2,"-",3)}`);
-console.log(`Operation ${2} * ${3} = ${operate(2,"*",3)}`);
-console.log(`Operation ${2} / ${3} = ${operate(2,"/",3)}`);
+
 function updateDateCopyRight(){
     let date = new Date();
     let footer = document.querySelector(".footer");
@@ -52,3 +45,28 @@ function updateDateCopyRight(){
     return;
 }
 updateDateCopyRight();
+
+let buttons = Array.from(document.querySelectorAll('button'));
+let digitButtons = buttons.filter(item => /num-/.test(item.getAttribute('id')));
+let operatorButtons = buttons.filter(item => item.getAttribute('class') === "operator");
+let deleteButton = document.querySelector('#delete');
+let clearButton = document.querySelector('#clear');
+let equalityButton = document.querySelector('#equal');
+let pointButton = document.querySelector('#point');
+
+digitButtons.forEach(item => item.addEventListener("click", function(){
+    let operandOneValue = parseInt(item.innerText);
+    updateOperandOne(operandOneValue);
+    updateOperationDisplay();
+}));
+
+function updateOperandOne(value) {
+    operandOne = value;
+    return;
+}
+
+function updateOperationDisplay(){
+    const display = document.querySelector('.current-operation');
+    display.textContent = operandOne;
+    return;
+}
