@@ -167,7 +167,8 @@ operatorButtons.forEach(item => item.addEventListener("click", function() {
         //Check if result is null.
         //If it is the case, then make operation.
         proceedOperation();
-        clearLowerDisplay();
+        //clearLowerDisplay();
+        updateLowerDisplay(result);
         operandOne = result;
         operandTwo = null;
         result = null;
@@ -179,7 +180,8 @@ operatorButtons.forEach(item => item.addEventListener("click", function() {
     }else{
         //we have operand one, operand two and result.
         //Simulate when we click an operator after we clicked equality.
-        clearLowerDisplay();
+        //clearLowerDisplay();
+        updateLowerDisplay(result);
         operandOne = result;
         operandTwo = null;
         result = null;
