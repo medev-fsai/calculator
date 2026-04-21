@@ -207,6 +207,20 @@ function proceedOperation(){
     return;
 }
 
+function initMemory(){
+    operandOne = null;
+    operandTwo = null;
+    operator = null;
+    result = null;
+    return;
+}
+
+clearButton.addEventListener("click", function(){
+    //Init
+    initMemory();
+    clearLowerDisplay();
+    clearUpperDisplay();
+});
 /*
 function formatOperator(value){
     return value === "*" ? '&times;'  : 
