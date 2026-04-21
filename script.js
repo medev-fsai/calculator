@@ -16,6 +16,7 @@ function multiply(num1, num2){
 }
 
 function divide(num1, num2){
+    //if (num2 === 0) return "ERROR";
     return num1 / num2;
 }
 
@@ -158,7 +159,6 @@ function clearUpperDisplay(){
     return;
 }
 
-//console.log(operatorButtons);
 operatorButtons.forEach(item => item.addEventListener("click", function() {
     
     let operation = item.getAttribute('id');
@@ -172,20 +172,17 @@ operatorButtons.forEach(item => item.addEventListener("click", function() {
         //Check if result is null.
         //If it is the case, then make operation.
         proceedOperation();
-        //clearLowerDisplay();
         updateLowerDisplay(result);
+        
         operandOne = result;
         operandTwo = null;
         result = null;
         updateOperator(operation);
         updateUpperDisplay();
-        //console.log("operand One is " + operandOne);
-        //console.log("Operator is " + operator);
-        //console.log("Operand Two is " + operandTwo);
+        
     }else{
         //we have operand one, operand two and result.
         //Simulate when we click an operator after we clicked equality.
-        //clearLowerDisplay();
         updateLowerDisplay(result);
         operandOne = result;
         operandTwo = null;
