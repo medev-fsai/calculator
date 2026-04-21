@@ -69,7 +69,16 @@ digitButtons.forEach(item => item.addEventListener("click", function(){
         const display = updateOperandTwo(operandTwoValue);
         updateLowerDisplay(display);
     }else {
-        console.log("****");
+        //This means user already made an operation
+        //and clicked equal and received result.
+        //If he clicks then on a digital button
+        //It means he wants a new operation.
+        initMemory();
+        clearUpperDisplay();
+        clearLowerDisplay();
+        let operandOneValue = item.innerText;
+        const display = updateOperandOne(operandOneValue);
+        updateLowerDisplay(display);
     }
 }));
 
@@ -140,10 +149,6 @@ function updateUpperDisplay(){
     operandOneDisplayValue = operandOneDisplayValue ?? "";
     operatorDisplayValue = operatorDisplayValue ?? "";
     operandTwoDisplayValue = operandTwoDisplayValue ?? "";
-    //Add formatting before display
-    //multiplication appears as "*", and division as "/"
-    //But we want multiplication to be "&times;" and division to be "&divide;"
-    //operatorDisplayValue = formatOperator(operatorDisplayValue);
     upperDisplay.textContent += `${operandOneDisplayValue}${operatorDisplayValue}${operandTwoDisplayValue}`;
     return; 
 }
@@ -201,8 +206,6 @@ function proceedOperation(){
     if(proceed){
         //Operation is ready to be made
         result = operate(operandOne, operator, operandTwo);
-        //updateLowerDisplay(result);
-        //updateUpperDisplay();
     }
     return;
 }
@@ -221,9 +224,3 @@ clearButton.addEventListener("click", function(){
     clearLowerDisplay();
     clearUpperDisplay();
 });
-/*
-function formatOperator(value){
-    return value === "*" ? '&times;'  : 
-           value === "/" ? '&divide;' : value;
-}
-*/
