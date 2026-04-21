@@ -21,19 +21,23 @@ function divide(num1, num2){
 
 
 function operate(operandOne, operator, operandTwo){
-
+    let opeRes = null;
     switch(operator){
         case "+":
-            return add(operandOne, operandTwo);
+            opeRes = add(operandOne, operandTwo);
+            return Number(opeRes.toFixed(6));
             break;
         case "-":
-            return subtract(operandOne, operandTwo);
+            opeRes = subtract(operandOne, operandTwo);
+            return Number(opeRes.toFixed(6));
             break;
         case "/":
-            return divide(operandOne, operandTwo);
+            opeRes = divide(operandOne, operandTwo);
+            return Number(opeRes.toFixed(6));
             break;
         case "*":
-            return multiply(operandOne, operandTwo);
+            opeRes = multiply(operandOne, operandTwo);
+            return Number(opeRes.toFixed(6));
             break;
     }
 }
@@ -136,6 +140,10 @@ function updateUpperDisplay(){
     operandOneDisplayValue = operandOneDisplayValue ?? "";
     operatorDisplayValue = operatorDisplayValue ?? "";
     operandTwoDisplayValue = operandTwoDisplayValue ?? "";
+    //Add formatting before display
+    //multiplication appears as "*", and division as "/"
+    //But we want multiplication to be "&times;" and division to be "&divide;"
+    //operatorDisplayValue = formatOperator(operatorDisplayValue);
     upperDisplay.textContent += `${operandOneDisplayValue}${operatorDisplayValue}${operandTwoDisplayValue}`;
     return; 
 }
@@ -164,3 +172,10 @@ equalityButton.addEventListener("click", function() {
         updateUpperDisplay();
     }
 });
+
+/*
+function formatOperator(value){
+    return value === "*" ? '&times;'  : 
+           value === "/" ? '&divide;' : value;
+}
+*/
