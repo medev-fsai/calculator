@@ -155,23 +155,55 @@ function clearUpperDisplay(){
 
 //console.log(operatorButtons);
 operatorButtons.forEach(item => item.addEventListener("click", function() {
-    if(!checkOperandOneIsNull()){
-        let operation = item.getAttribute('id');
+    
+    let operation = item.getAttribute('id');
+    console.log("Clicked ****** " + operation);
+    if(checkOperatorIsNull() || checkOperandTwoIsNull()){
         updateOperator(operation);
         clearLowerDisplay();
+        updateUpperDisplay();
+    }else if(checkResultIsNull()){
+        //This simulates the third click before any equality click
+        //Check if result is null.
+        //If it is the case, then make operation.
+        proceedOperation();
+        clearLowerDisplay();
+        operandOne = result;
+        operandTwo = null;
+        result = null;
+        updateOperator(operation);
+        updateUpperDisplay();
+        //console.log("operand One is " + operandOne);
+        //console.log("Operator is " + operator);
+        //console.log("Operand Two is " + operandTwo);
+    }else{
+        //we have operand one, operand two and result.
+        //Simulate when we click an operator after we clicked equality.
+        clearLowerDisplay();
+        operandOne = result;
+        operandTwo = null;
+        result = null;
+        updateOperator(operation);
         updateUpperDisplay();
     }
 }));
 
-equalityButton.addEventListener("click", function() {
+equalityButton.addEventListener("click", function(){
+    proceedOperation();
+    updateLowerDisplay(result);
+    updateUpperDisplay();
+});
+
+function proceedOperation(){
     let proceed = (!checkOperandOneIsNull()) && (!checkOperatorIsNull()) && (!checkOperandTwoIsNull());
     if(proceed){
         //Operation is ready to be made
         result = operate(operandOne, operator, operandTwo);
-        updateLowerDisplay(result);
-        updateUpperDisplay();
+        //updateLowerDisplay(result);
+        //updateUpperDisplay();
     }
-});
+    return;
+}
 
 /*
 function formatOperator(value){
