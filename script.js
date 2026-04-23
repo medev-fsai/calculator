@@ -1,8 +1,12 @@
-let operandOne = null;
-let operandTwo = null;
+let operandOne = "";
+let operandTwo = "";
 let operator = null;
-let result = null;
+let result = "";
 let state = "enteringFirstOperand";
+let prev = {
+    type : "",
+    value: ""
+};
 /*
 STATES:
     - enteringFirstOperand: when forming number one.
@@ -20,10 +24,75 @@ buttons.forEach(element => element.addEventListener("click", processUserInput));
 
 function processUserInput(event){
     const item = event.currentTarget;
-    console.log(getInputInfo(item));
+    const input = getInputInfo(item);
+    
+    //Simple edge case "clear"
+    if (input.type === "clear"){
+        initMemory();
+        updateDisplay("");
+        return;
+    }
+    if(state === "enteringFirstOperand"){
+        if(input.type === "digit"){
+            //update Operand One
+            operandOne = `${operandOne}`.concat('', input.value);
+            //Store use choice in prev
+            updatePrev(input.type, input.value);
+            //update display
+            updateDisplay(operandOne);
+            return;
+        }else if(input.type === "point"){
+            //This case means user wants to enter a float
+            operandOne = operandOne || "0";
+            if(!String(operandOne).includes(".")){
+                //Operand one contains an integer. Transform it into float
+                operandOne = `${operandOne}`.concat('', input.value);
+                //Store use choice in prev
+                updatePrev(input.type, input.value);
+                //update display
+                updateDisplay(operandOne);
+            }else{
+                //Operand One contains already a float.
+                return;
+            }
+        }else if(input.type === "equal"){
+            //We only have one display which already contains the typed number.
+            //We should exit. Operand One is still on its value.
+            return;
+        }else if(input.type === "operator"){
+            //Now users finished typing first number
+
+        }else {
+            //User clicked "delete" to correct previous click.
+            //case User clicked "clear" is already handled outside.
+        }
+    }else if(state === "enteringOperator"){
+
+    }else if(state === "enteringSecondOperand"){
+
+    }else{
+
+    }
 };
 
+function initMemory(){
+    operandOne = operandTwo = result = "";
+    operator = null;
+    updatePrev("", "");
+    state = "enteringFirstOperand";
 
+}
+
+function updateDisplay(value){
+    document.querySelector('.current-operation').textContent = value;
+    return;
+}
+
+function updatePrev(val1, val2){
+    prev.type = val1;
+    prev.value= val2;
+    return;
+}
 
 function add(num1, num2){
     return num1 + num2;
