@@ -2,6 +2,7 @@ let operandOne = null;
 let operandTwo = null;
 let operator = null;
 let result = null;
+let state = "enteringFirstOperand";
 
 function add(num1, num2){
     return num1 + num2;
@@ -16,7 +17,6 @@ function multiply(num1, num2){
 }
 
 function divide(num1, num2){
-    //if (num2 === 0) return "ERROR";
     return num1 / num2;
 }
 
@@ -26,19 +26,19 @@ function operate(operandOne, operator, operandTwo){
     switch(operator){
         case "+":
             opeRes = add(operandOne, operandTwo);
-            return Number(opeRes.toFixed(6));
+            return Number(opeRes.toFixed(8));
             break;
         case "-":
             opeRes = subtract(operandOne, operandTwo);
-            return Number(opeRes.toFixed(6));
+            return Number(opeRes.toFixed(8));
             break;
         case "/":
             opeRes = divide(operandOne, operandTwo);
-            return Number(opeRes.toFixed(6));
+            return Number(opeRes.toFixed(8));
             break;
         case "*":
             opeRes = multiply(operandOne, operandTwo);
-            return Number(opeRes.toFixed(6));
+            return Number(opeRes.toFixed(8));
             break;
     }
 }
@@ -53,171 +53,3 @@ function updateDateCopyRight(){
 updateDateCopyRight();
 
 let buttons = Array.from(document.querySelectorAll('button'));
-let digitButtons = buttons.filter(item => /num-/.test(item.getAttribute('id')));
-let operatorButtons = buttons.filter(item => item.getAttribute('class') === "operator");
-let deleteButton = document.querySelector('#delete');
-let clearButton = document.querySelector('#clear');
-let equalityButton = document.querySelector('#equal');
-let pointButton = document.querySelector('#point');
-
-digitButtons.forEach(item => item.addEventListener("click", function(){
-    if(checkOperatorIsNull()){
-        let operandOneValue = item.innerText;
-        const display = updateOperandOne(operandOneValue);
-        updateLowerDisplay(display);
-    }else if(checkResultIsNull()){
-        let operandTwoValue = item.innerText;
-        const display = updateOperandTwo(operandTwoValue);
-        updateLowerDisplay(display);
-    }else {
-        //This means user already made an operation
-        //and clicked equal and received result.
-        //If he clicks then on a digital button
-        //It means he wants a new operation.
-        initMemory();
-        clearUpperDisplay();
-        clearLowerDisplay();
-        let operandOneValue = item.innerText;
-        const display = updateOperandOne(operandOneValue);
-        updateLowerDisplay(display);
-    }
-}));
-
-function updateOperandOne(value) {
-    operandOne = operandOne ?? 0; 
-    operandOne = parseInt(`${operandOne}` + value);
-    console.log("Operand One " + operandOne);
-    return operandOne;
-}
-
-function updateOperandTwo(value) {
-    operandTwo = operandTwo ?? 0;
-    operandTwo = parseInt(`${operandTwo}` + value);
-    console.log("Operand Two " + operandTwo);
-    return operandTwo;
-}
-
-function checkOperandOneIsNull(){
-    return operandOne === null;
-}
-function checkOperandTwoIsNull(){
-    return operandTwo === null;
-}
-function checkOperatorIsNull(){
-    return operator === null;
-}
-function checkResultIsNull(){
-    return result === null;
-}
-
-function updateOperator(value){
-    switch(value){
-        case "add":
-            operator = "+";
-            break;
-        case "subtract":
-            operator = "-";
-            break;
-        case "divide":
-            operator = "/";
-            break;
-        case "multiply":
-            operator = "*";
-            break;
-        default:
-            operator = "+";
-            break;
-    }
-}   
-
-function updateLowerDisplay(value){
-    const display = document.querySelector('.current-operation');
-    display.textContent = value;
-    return;
-}
-
-function clearLowerDisplay(){
-    document.querySelector('.current-operation').textContent = "";
-    return;
-}
-
-function updateUpperDisplay(){
-    clearUpperDisplay();
-    const upperDisplay = document.querySelector(".last-operation");
-    let operandOneDisplayValue = operandOne;
-    let operandTwoDisplayValue = operandTwo;
-    let operatorDisplayValue = operator;
-    operandOneDisplayValue = operandOneDisplayValue ?? "";
-    operatorDisplayValue = operatorDisplayValue ?? "";
-    operandTwoDisplayValue = operandTwoDisplayValue ?? "";
-    upperDisplay.textContent += `${operandOneDisplayValue}${operatorDisplayValue}${operandTwoDisplayValue}`;
-    return; 
-}
-
-function clearUpperDisplay(){
-    document.querySelector('.last-operation').textContent = "";
-    return;
-}
-
-operatorButtons.forEach(item => item.addEventListener("click", function() {
-    
-    let operation = item.getAttribute('id');
-    console.log("Clicked ****** " + operation);
-    if(checkOperatorIsNull() || checkOperandTwoIsNull()){
-        updateOperator(operation);
-        clearLowerDisplay();
-        updateUpperDisplay();
-    }else if(checkResultIsNull()){
-        //This simulates the third click before any equality click
-        //Check if result is null.
-        //If it is the case, then make operation.
-        proceedOperation();
-        updateLowerDisplay(result);
-        
-        operandOne = result;
-        operandTwo = null;
-        result = null;
-        updateOperator(operation);
-        updateUpperDisplay();
-        
-    }else{
-        //we have operand one, operand two and result.
-        //Simulate when we click an operator after we clicked equality.
-        updateLowerDisplay(result);
-        operandOne = result;
-        operandTwo = null;
-        result = null;
-        updateOperator(operation);
-        updateUpperDisplay();
-    }
-}));
-
-equalityButton.addEventListener("click", function(){
-    proceedOperation();
-    updateLowerDisplay(result);
-    updateUpperDisplay();
-});
-
-function proceedOperation(){
-    let proceed = (!checkOperandOneIsNull()) && (!checkOperatorIsNull()) && (!checkOperandTwoIsNull());
-    if(proceed){
-        //Operation is ready to be made
-        result = operate(operandOne, operator, operandTwo);
-    }
-    return;
-}
-
-function initMemory(){
-    operandOne = null;
-    operandTwo = null;
-    operator = null;
-    result = null;
-    return;
-}
-
-clearButton.addEventListener("click", function(){
-    //Init
-    initMemory();
-    clearLowerDisplay();
-    clearUpperDisplay();
-});
