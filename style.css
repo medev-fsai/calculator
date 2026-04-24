@@ -61,8 +61,8 @@ body {
     border-radius: 8px;
     margin: 20px auto 10px;
     background-color: #f1f1f1;
-    display: flex;
-    flex-direction: column;
+    /*display: flex;
+    flex-direction: column;*/
 }
 /*
 .last-operation,
@@ -82,7 +82,10 @@ body {
 .current-operation {
     height: 75px;
     padding: 0px 10px;
-    font-size: 60px;
+    font-size: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 
