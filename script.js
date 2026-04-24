@@ -1,7 +1,6 @@
 let operandOne = "";
 let operandTwo = "";
 let operator = null;
-let result = "";
 let state = "enteringFirstOperand";
 let prev = {
     type : "",
@@ -90,6 +89,7 @@ function processUserInput(event){
             //return;
         }
     }else if(state === "enteringOperator"){
+        //User clicked a digit and an operator
         if(input.type === "digit"){
             //User already entered operator and Operand One  
             //update Operand Two
@@ -99,7 +99,7 @@ function processUserInput(event){
             //Store use choice in prev
             updatePrev(input.type, input.value);
             //update display
-            updateDisplay(operandTwo);
+            updateDisplay(`${operandOne}`.concat(operator, operandTwo));
             //return;
     
         }else if(input.type === "point"){
@@ -115,8 +115,25 @@ function processUserInput(event){
             //return;
         }else if(input.type === "equal"){
             //User entered operand One and an operator
+            //Imagine 2/= here we should understand it as 2/0 and return error.
             //Then clicked "="
             //return;
+            const num1 = Number(operandOne);
+            const num2 = 0;
+            const result = operate(num1, operator, num2);
+            if(result === "ERROR"){
+                initMemory();
+                updatePrev("", "");
+                //Update display to user
+                updateDisplay("ERROR !");
+            }else{
+                initMemory();
+                operandOne = result;
+                updatePrev(input.type, input.value);
+                //+result: ensures no non necessary zeros are after comma
+                //for floating numbers. 
+                updateDisplay(+result);
+            }
         }else if(input.type === "operator"){
             //User already entered an operator, and is filling another
             //Interpret this as if he is changing operator.
@@ -139,37 +156,98 @@ function processUserInput(event){
             //return;
 
         }
-    }else if(state === "enteringSecondOperand"){
-        if(input.type === "digit"){
-
-        }else if(input.type === "point"){
-
-        }else if(input.type === "equal"){
-
-        }else if(input.type === "operator"){
-            
-        }else{
-            
-        }
     }else{
+        //state === "enteringSecondOperand"
+        //User clicked number one, operator, and at least a digit in number two
         if(input.type === "digit"){
-
+            operandTwo = `${operandTwo}`.concat('', input.value);
+            //Store use choice in prev
+            updatePrev(input.type, input.value);
+            //update display
+            updateDisplay(`${operandOne}`.concat(operator, operandTwo));
+            //return;
         }else if(input.type === "point"){
-
+            if(!String(operandTwo).includes(".")){
+                //Operand one contains an integer. Transform it into float
+                operandTwo = `${operandTwo}`.concat('', input.value);
+                //Store use choice in prev
+                updatePrev(input.type, input.value);
+                //update display
+                updateDisplay(`${operandOne}`.concat(operator, operandTwo));
+            }else{
+                //Operand Two contains already a float.
+                //return;
+            }
         }else if(input.type === "equal"){
-
+            //User wants the result
+            const num1 = Number(operandOne);
+            const num2 = Number(operandTwo);
+            const result = operate(num1, operator, num2);
+            if(result === "ERROR"){
+                //Restart from zero, entering first number
+                initMemory();
+                updatePrev("", "");
+                //Update display to user
+                updateDisplay("ERROR !");
+            }else{
+                initMemory();
+                operandOne = result;
+                updatePrev(input.type, input.value);
+                //+result: ensures no non necessary zeros are after comma
+                //for floating numbers. 
+                updateDisplay(+result);
+            }
         }else if(input.type === "operator"){
-            
+            //User wants go forward with calculation
+            //Already have operand One, Operator, and operand Two
+            const num1 = Number(operandOne);
+            const num2 = Number(operandTwo);
+            const result = operate(num1, operator, num2);
+            console.log("RESULT " + result);
+            if(result === "ERROR"){
+                //Restart from zero, entering first number
+                initMemory();
+                updatePrev("", "");
+                //Update display to user
+                updateDisplay("ERROR !");
+            }else{
+                //+result ensures if there are zeros after comma for floating numbers
+                //then remove them via integer type casting
+                //Then switch back to string.
+                operandOne = String(+result);
+                operandTwo = "";
+                operator = input.value;
+                state = "enteringOperator";
+                updatePrev(input.type, input.value);
+                updateDisplay(`${operandOne}`.concat('', operator));
+            }
+
         }else{
-            
+           //User wants to delete one digit or a point from Number Two. 
+            operandTwo = operandTwo.slice(0, -1);
+            //Imagine user clicked . then delete. operand One would be "0"
+            //making a 0 display for the user which is not nice.
+            //force it to be ""
+            operandTwo = (operandTwo === "0") ? "" : operandTwo;
+            //If operand Two had only one digit that is deleted, now it is empty
+            //Go back to entering operator phase
+            if(operandTwo === ""){
+                state = "enteringOperator";
+            }
+            //Store use choice in prev
+            updatePrev(input.type, input.value);
+            //update display
+            updateDisplay(`${operandOne}`.concat(operator, operandTwo));
+            //return;
         }
     }
-
+    
     console.log(operandOne + " : " + operator + " : " + operandTwo);
+    return;
 };
 
 function initMemory(){
-    operandOne = operandTwo = result = "";
+    operandOne = operandTwo = "";
     operator = null;
     updatePrev("", "");
     state = "enteringFirstOperand";
@@ -204,28 +282,37 @@ function divide(num1, num2){
 }
 
 
-function operate(operandOne, operator, operandTwo){
+function operate(operandOne, operator, operandTwo, precision=6){
     let opeRes = null;
     switch(operator){
         case "+":
             opeRes = add(operandOne, operandTwo);
-            return Number(opeRes.toFixed(8));
             break;
         case "-":
             opeRes = subtract(operandOne, operandTwo);
-            return Number(opeRes.toFixed(8));
             break;
         case "/":
             opeRes = divide(operandOne, operandTwo);
-            return Number(opeRes.toFixed(8));
             break;
         case "*":
             opeRes = multiply(operandOne, operandTwo);
-            return Number(opeRes.toFixed(8));
             break;
     }
-}
+    //UPDATE
+    //Before toFixed, check how much numbers after point are there
+    //ELSE, to fixed will fill the remaining gaps by zeros.
 
+    return (isFinite(opeRes)) ? opeRes.toFixed(precision) : "ERROR";
+    /*
+    if (!isFinite(opeRes)) return "ERROR";
+    opeRes = String(opeRes);
+    if(opeRes.includes('.')){
+        opeRes = (opeRes.at(-1) === "0") ? String(Number(opeRes)) : opeRes;
+    }else{
+        return opeRes;
+    }
+    */
+}
 
 
 
