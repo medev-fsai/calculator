@@ -81,11 +81,13 @@ body {
 */
 .current-operation {
     height: 75px;
+    line-height: 75px;
     padding: 0px 10px;
     font-size: 40px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
+    align-items: flex-end;
+    overflow: hidden;
 }
 
 

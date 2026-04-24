@@ -33,13 +33,24 @@ function processUserInput(event){
     }
     if(state === "enteringFirstOperand"){
         if(input.type === "digit"){
-            //update Operand One
-            operandOne = `${operandOne}`.concat('', input.value);
-            //Store use choice in prev
-            updatePrev(input.type, input.value);
-            //update display
-            updateDisplay(operandOne);
-            //return;
+            //Edge case: imagine user typed 0 
+            //Then now typed 8, the display will be 08
+            //Should be only 8.
+            if(operandOne === "0"){
+                operandOne = input.value;
+                //Store use choice in prev
+                updatePrev(input.type, input.value);
+                //update display
+                updateDisplay(operandOne);
+            }else{
+                //update Operand One
+                operandOne = `${operandOne}`.concat('', input.value);
+                //Store use choice in prev
+                updatePrev(input.type, input.value);
+                //update display
+                updateDisplay(operandOne);
+                //return;
+            }
         }else if(input.type === "point"){
             //This case means user wants to enter a float
             operandOne = operandOne || "0";
