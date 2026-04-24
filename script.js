@@ -302,16 +302,17 @@ function operate(operandOne, operator, operandTwo, precision=6){
     //Before toFixed, check how much numbers after point are there
     //ELSE, to fixed will fill the remaining gaps by zeros.
 
-    return (isFinite(opeRes)) ? opeRes.toFixed(precision) : "ERROR";
-    /*
+    
     if (!isFinite(opeRes)) return "ERROR";
     opeRes = String(opeRes);
     if(opeRes.includes('.')){
         opeRes = (opeRes.at(-1) === "0") ? String(Number(opeRes)) : opeRes;
+        return opeRes;
     }else{
         return opeRes;
     }
-    */
+    
+  
 }
 
 
