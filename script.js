@@ -2,16 +2,12 @@ let operandOne = "";
 let operandTwo = "";
 let operator = null;
 let state = "enteringFirstOperand";
-let prev = {
-    type : "",
-    value: ""
-};
+
 /*
 STATES:
     - enteringFirstOperand: when forming number one.
     - enteringOperator: when forming operator.
     - enteringSecondOperand: when forming number two.
-    - 
 */
 
 updateDateCopyRight();
@@ -38,15 +34,11 @@ function processUserInput(event){
             //Should be only 8.
             if(operandOne === "0"){
                 operandOne = input.value;
-                //Store use choice in prev
-                updatePrev(input.type, input.value);
                 //update display
                 updateDisplay(operandOne);
             }else{
                 //update Operand One
                 operandOne = `${operandOne}`.concat('', input.value);
-                //Store use choice in prev
-                updatePrev(input.type, input.value);
                 //update display
                 updateDisplay(operandOne);
                 //return;
@@ -57,8 +49,6 @@ function processUserInput(event){
             if(!String(operandOne).includes(".")){
                 //Operand one contains an integer. Transform it into float
                 operandOne = `${operandOne}`.concat('', input.value);
-                //Store use choice in prev
-                updatePrev(input.type, input.value);
                 //update display
                 updateDisplay(operandOne);
             }else{
@@ -78,7 +68,6 @@ function processUserInput(event){
                 const result = operate(num1, "+", num2);
                 initMemory();
                 operandOne = result;
-                updatePrev(input.type, input.value);
                 //+result: ensures no non necessary zeros are after comma
                 //for floating numbers. 
                 updateDisplay(result);
@@ -94,8 +83,6 @@ function processUserInput(event){
             //Now users finished typing first number
             state = "enteringOperator";
             operator = input.value;
-            //Store use choice in prev
-            updatePrev(input.type, input.value);
             //update display
             updateDisplay(`${operandOne}`.concat('', operator));
             //return;
@@ -109,8 +96,6 @@ function processUserInput(event){
             //making a 0 display for the user which is not nice.
             //force it to be ""
             operandOne = (operandOne === "0") ? "" : operandOne;
-            //Store use choice in prev
-            updatePrev(input.type, input.value);
             //update display
             updateDisplay(operandOne);
             //return;
@@ -122,9 +107,7 @@ function processUserInput(event){
             //update Operand Two
             operandTwo = `${operandTwo}`.concat('', input.value);
             //update state
-            state = "enteringSecondOperand";  
-            //Store use choice in prev
-            updatePrev(input.type, input.value);
+            state = "enteringSecondOperand";
             //update display
             updateDisplay(`${operandOne}`.concat(operator, operandTwo));
             //return;
@@ -135,8 +118,6 @@ function processUserInput(event){
             //This is consistent with previous behavior for operand One.
             operandTwo = "0.";
             state = "enteringSecondOperand";
-            //store user choice
-            updatePrev(input.type, input.value);
             //update display
             updateDisplay(`${operandOne}`.concat(operator, operandTwo));
             //return;
@@ -150,13 +131,11 @@ function processUserInput(event){
             const result = operate(num1, operator, num2);
             if(result === "ERROR"){
                 initMemory();
-                updatePrev("", "");
                 //Update display to user
                 updateDisplay("ERROR !");
             }else{
                 initMemory();
                 operandOne = result;
-                updatePrev(input.type, input.value);
                 //+result: ensures no non necessary zeros are after comma
                 //for floating numbers. 
                 updateDisplay(result);
@@ -165,8 +144,6 @@ function processUserInput(event){
             //User already entered an operator, and is filling another
             //Interpret this as if he is changing operator.
             operator = input.value;
-            //Store user choice
-            updatePrev(input.type, input.value);
             //update display
             updateDisplay(`${operandOne}`.concat('', operator));
             //return;
@@ -176,8 +153,6 @@ function processUserInput(event){
             //Or wants to change operand One (MOST LIKELY)
             operator = null;
             state = "enteringFirstOperand";
-            //Store user choice
-            updatePrev(input.type, input.value);
             //update display
             updateDisplay(`${operandOne}`);
             //return;
@@ -188,8 +163,6 @@ function processUserInput(event){
         //User clicked number one, operator, and at least a digit in number two
         if(input.type === "digit"){
             operandTwo = `${operandTwo}`.concat('', input.value);
-            //Store use choice in prev
-            updatePrev(input.type, input.value);
             //update display
             updateDisplay(`${operandOne}`.concat(operator, operandTwo));
             //return;
@@ -197,8 +170,6 @@ function processUserInput(event){
             if(!String(operandTwo).includes(".")){
                 //Operand one contains an integer. Transform it into float
                 operandTwo = `${operandTwo}`.concat('', input.value);
-                //Store use choice in prev
-                updatePrev(input.type, input.value);
                 //update display
                 updateDisplay(`${operandOne}`.concat(operator, operandTwo));
             }else{
@@ -213,13 +184,11 @@ function processUserInput(event){
             if(result === "ERROR"){
                 //Restart from zero, entering first number
                 initMemory();
-                updatePrev("", "");
                 //Update display to user
                 updateDisplay("ERROR !");
             }else{
                 initMemory();
                 operandOne = result;
-                updatePrev(input.type, input.value);
                 //+result: ensures no non necessary zeros are after comma
                 //for floating numbers. 
                 updateDisplay(result);
@@ -233,7 +202,6 @@ function processUserInput(event){
             if(result === "ERROR"){
                 //Restart from zero, entering first number
                 initMemory();
-                updatePrev("", "");
                 //Update display to user
                 updateDisplay("ERROR !");
             }else{
@@ -244,7 +212,6 @@ function processUserInput(event){
                 operandTwo = "";
                 operator = input.value;
                 state = "enteringOperator";
-                updatePrev(input.type, input.value);
                 updateDisplay(`${operandOne}`.concat('', operator));
             }
 
@@ -260,8 +227,6 @@ function processUserInput(event){
             if(operandTwo === ""){
                 state = "enteringOperator";
             }
-            //Store use choice in prev
-            updatePrev(input.type, input.value);
             //update display
             updateDisplay(`${operandOne}`.concat(operator, operandTwo));
             //return;
@@ -275,7 +240,6 @@ function processUserInput(event){
 function initMemory(){
     operandOne = operandTwo = "";
     operator = null;
-    updatePrev("", "");
     state = "enteringFirstOperand";
 
 }
@@ -285,11 +249,6 @@ function updateDisplay(value){
     return;
 }
 
-function updatePrev(val1, val2){
-    prev.type = val1;
-    prev.value= val2;
-    return;
-}
 
 function add(num1, num2){
     return num1 + num2;
@@ -347,10 +306,6 @@ function formatResult(value, precision){
         return result;
     }
 }
-
-//console.log(formatResult(125.1250145128,6));
-//console.log(formatResult(10.000230000,6));
-//console.log(formatResult(1254.23,6));
 
 
 
