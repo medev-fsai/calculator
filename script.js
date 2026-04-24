@@ -62,7 +62,7 @@ function processUserInput(event){
             //Should be changed. 
             //If one "digit" or "digit." operate with + 0
             //If nothing, operate 0 + 0. 
-            if(operandOne.length>0){
+            if(!(operandOne.length===0)){
                 const num1 = Number(operandOne);
                 const num2 = 0;
                 const result = operate(num1, "+", num2);
@@ -289,6 +289,7 @@ function operate(operandOne, operator, operandTwo, precision=6){
     return formatResult(opeRes, precision);
 }
 
+console.log("OPERATE" + operate(Number("1"), "+", 0));
 
 function formatResult(value, precision){
     //*Formatting result for the best possible display for user.
