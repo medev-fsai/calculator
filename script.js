@@ -58,6 +58,9 @@ function processUserInput(event){
             //We only have one display which already contains the typed number.
             //We should exit. Operand One is still on its value.
             //return;
+            //Should be changed. 
+            //If one "digit" or "digit." operate with + 0
+            //If nothing, operate 0 + 0. 
         }else if(input.type === "operator"){
             //If user clicks operator before typing any number
             //should default operand one to 0
@@ -132,7 +135,7 @@ function processUserInput(event){
                 updatePrev(input.type, input.value);
                 //+result: ensures no non necessary zeros are after comma
                 //for floating numbers. 
-                updateDisplay(+result);
+                updateDisplay(result);
             }
         }else if(input.type === "operator"){
             //User already entered an operator, and is filling another
@@ -195,7 +198,7 @@ function processUserInput(event){
                 updatePrev(input.type, input.value);
                 //+result: ensures no non necessary zeros are after comma
                 //for floating numbers. 
-                updateDisplay(+result);
+                updateDisplay(result);
             }
         }else if(input.type === "operator"){
             //User wants go forward with calculation
@@ -203,7 +206,6 @@ function processUserInput(event){
             const num1 = Number(operandOne);
             const num2 = Number(operandTwo);
             const result = operate(num1, operator, num2);
-            console.log("RESULT " + result);
             if(result === "ERROR"){
                 //Restart from zero, entering first number
                 initMemory();
@@ -211,10 +213,10 @@ function processUserInput(event){
                 //Update display to user
                 updateDisplay("ERROR !");
             }else{
-                //+result ensures if there are zeros after comma for floating numbers
+                //String(+result) ensures if there are zeros after comma for floating numbers
                 //then remove them via integer type casting
                 //Then switch back to string.
-                operandOne = String(+result);
+                operandOne = result;
                 operandTwo = "";
                 operator = input.value;
                 state = "enteringOperator";
@@ -301,19 +303,30 @@ function operate(operandOne, operator, operandTwo, precision=6){
     //UPDATE
     //Before toFixed, check how much numbers after point are there
     //ELSE, to fixed will fill the remaining gaps by zeros.
-
-    
-    if (!isFinite(opeRes)) return "ERROR";
-    opeRes = String(opeRes);
-    if(opeRes.includes('.')){
-        opeRes = (opeRes.at(-1) === "0") ? String(Number(opeRes)) : opeRes;
-        return opeRes;
-    }else{
-        return opeRes;
-    }
-    
-  
+    return formatResult(opeRes, precision);
 }
+
+
+function formatResult(value, precision){
+    //*Formatting result for the best possible display for user.
+    //*Ex: 141.14-86.33 = 54.80999999999999 should become 54.809999
+    //*Ex: 2.003000 should become 2.003
+    if (!isFinite(value)) return "ERROR";
+    let result = String(value);
+    if(result.includes('.')){
+        result = (result.split('.').at(-1).length > precision) ? value.toFixed(precision) : result;
+        //But now : 141.14 : - : 3.36 = 137.780000
+        //Should remove those zeros at the end.
+        result = (result.at(-1) === "0") ? String(Number(result)) : result;
+        return result;
+    }else{
+        return result;
+    }
+}
+
+//console.log(formatResult(125.1250145128,6));
+//console.log(formatResult(10.000230000,6));
+//console.log(formatResult(1254.23,6));
 
 
 
