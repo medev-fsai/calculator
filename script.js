@@ -61,6 +61,19 @@ function processUserInput(event){
             //Should be changed. 
             //If one "digit" or "digit." operate with + 0
             //If nothing, operate 0 + 0. 
+            if(operandOne.length>0){
+                const num1 = Number(operandOne);
+                const num2 = 0;
+                const result = operate(num1, "+", num2);
+                initMemory();
+                operandOne = result;
+                updatePrev(input.type, input.value);
+                //+result: ensures no non necessary zeros are after comma
+                //for floating numbers. 
+                updateDisplay(result);
+            }else{
+                updateDisplay("0");
+            }
         }else if(input.type === "operator"){
             //If user clicks operator before typing any number
             //should default operand one to 0
